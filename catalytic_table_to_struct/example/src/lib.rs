@@ -31,6 +31,7 @@ mod test {
     use scylla::CachingSession;
 
     #[tokio::test]
+    #[serial_test::serial]
     async fn crud() {
         let session = CachingSession::from(create_connection().await, 1);
 
@@ -245,6 +246,7 @@ mod test {
     }
 
     #[tokio::test]
+    #[serial_test::serial]
     async fn paging() -> Result<(), SerializeValuesError> {
         let session = CachingSession::from(create_connection().await, 1);
         let rows_to_generate = 100;
@@ -297,13 +299,12 @@ mod test {
         assert_eq!(counter_rows, rows_to_generate);
         assert_eq!(counter_loop, (rows_to_generate / 7) + 1);
 
-        crate::generated::person::truncate(&session).await.unwrap();
-
         Ok(())
     }
 
     /// Tests that when a custom field_name is provided, everything keeps working
     #[tokio::test]
+    #[serial_test::serial]
     async fn custom_field_name() {
         let connection = CachingSession::from(create_connection().await, 1);
 
@@ -410,6 +411,7 @@ mod test {
     }
 
     #[tokio::test]
+    #[serial_test::serial]
     async fn qmd() -> Result<(), SerializeValuesError> {
         let session = CachingSession::from(create_connection().await, 1);
 
