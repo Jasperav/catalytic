@@ -125,7 +125,7 @@ pub fn test_query(query: impl AsRef<str>) -> QueryMetadata {
     }
 
     // Execute the query with test values
-    if let Err(e) = block_on(GLOBAL_CONNECTION.query(query, values.clone())) {
+    if let Err(e) = block_on(GLOBAL_CONNECTION.query_unpaged(query, values.clone())) {
         panic!(
             "Query failed:
             Query: {}

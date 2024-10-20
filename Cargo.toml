@@ -19,21 +19,21 @@ categories = ["database"]
 license = "MIT"
 
 [workspace.dependencies]
-scylla = "0.11.1" # This crate is specifically build for this version
-once_cell = "1"
-heck = "0.4"
-tokio = { version = "1", features = ["time", "rt-multi-thread", "io-util"] }
-thiserror = "1"
-futures-util = "0.3"
-syn = { version = "2", features = ["full", "extra-traits"] }
-quote = "1"
-proc-macro2 = "1"
-serde = { version = "1", features = ["derive"] }
-serde_json = "1"
+scylla = "0.14.0" # This crate is specifically build for this version
+once_cell = "1.20.2"
+heck = "0.5.0"
+tokio = { version = "1.40.0", features = ["time", "rt-multi-thread", "io-util"] }
+thiserror = "1.0.64"
+futures-util = "0.3.31"
+syn = { version = "2.0.82", features = ["full", "extra-traits"] }
+quote = "1.0.37"
+proc-macro2 = "1.0.88"
+serde = { version = "1.0.210", features = ["derive"] }
+serde_json = "1.0.132"
 proc_macro2_helper = "0.2"
-uuid = "1"
-regex = "1"
+uuid = "1.11.0"
+regex = "1.11.0"
 tracing = "0.1"
 tracing-subscriber = "0.3"
-trybuild = "1"
+trybuild = "1.0.101"
 dotenvy = "0.15"

@@ -24,6 +24,7 @@ mod test {
     use crate::{MyJsonEnum, MyJsonType};
     use catalytic::runtime::create_connection;
     use catalytic::scylla;
+    use catalytic::scylla::transport::{PagingState, PagingStateResponse};
     use catalytic_macro::{query, query_base_table};
     use futures_util::StreamExt;
     use scylla::frame::value::{LegacySerializedValues, SerializeValuesError};
@@ -267,7 +268,7 @@ mod test {
 
         // Let's page
         let select_multiple = query!("select * from person where name = ? order by age", name);
-        let mut paging_state = None;
+        let mut paging_state = PagingState::start();
         let mut counter_rows = 0;
         let mut counter_loop = 0;
 
@@ -279,7 +280,6 @@ mod test {
                 .await
                 .unwrap();
 
-            paging_state = result.query_result.paging_state;
 
             for row in result.entities {
                 assert_eq!(row.age, counter_rows);
@@ -287,13 +287,17 @@ mod test {
                 counter_rows += 1;
             }
 
-            if paging_state.is_none() {
+            if let PagingStateResponse::HasMorePages { state: next_state } = result.paging_result {
+                paging_state = next_state;
+            } else {
                 break;
             }
         }
 
         assert_eq!(counter_rows, rows_to_generate);
         assert_eq!(counter_loop, (rows_to_generate / 7) + 1);
+
+        crate::generated::person::truncate(&session).await.unwrap();
 
         Ok(())
     }
