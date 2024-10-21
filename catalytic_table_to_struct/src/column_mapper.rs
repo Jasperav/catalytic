@@ -14,6 +14,7 @@ pub struct Field {
     pub borrow_ty: TokenStream,
     /// When 'ty' is String, this will be 'to_string()', else 'clone()'
     pub from_borrow_to_owned: TokenStream,
+    #[allow(dead_code)]
     pub attributes: TokenStream,
     /// Contains only the primary key attributes
     pub pk_attributes: TokenStream,

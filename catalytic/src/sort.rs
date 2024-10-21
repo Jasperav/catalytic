@@ -5,6 +5,7 @@ const CLUSTER_KEY_PROPERTY_POSITION: i32 = 1_000;
 // The value that will be given to ColumnInTable.position if kind == regular
 const NON_PK_PROPERTY_POSITION: i32 = 1_000_000;
 
+#[allow(clippy::doc_lazy_continuation)]
 /// Sorts all the columns
 /// It changes the position in a way that:
 /// - 'partition_key' columns are processed first
