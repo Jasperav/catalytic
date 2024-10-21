@@ -16,7 +16,7 @@ fn main() {
         "create materialized view if not exists person_by_email as
             select *
             from person
-            where name is not null and age is not null and email is not null and type is not null
+            where name is not null and age is not null and email is not null
             primary key ((email), name, age)",
         [],
     );
