@@ -282,7 +282,6 @@ mod test {
                 .await
                 .unwrap();
 
-
             for row in result.entities {
                 assert_eq!(row.age, counter_rows);
 

@@ -41,7 +41,12 @@ pub fn query_collect_to_vec<Entity: FromRow>(
 pub fn query(query: impl Into<Query>, values: impl SerializeRow) {
     touch_global_connection();
 
-    block_on(async move { GLOBAL_CONNECTION.query_unpaged(query, values).await.unwrap() });
+    block_on(async move {
+        GLOBAL_CONNECTION
+            .query_unpaged(query, values)
+            .await
+            .unwrap()
+    });
 }
 
 pub fn use_keyspace(keyspace: &str) {
