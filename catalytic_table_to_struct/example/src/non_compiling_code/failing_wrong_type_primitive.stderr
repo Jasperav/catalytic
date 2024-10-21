@@ -13,5 +13,5 @@ error[E0277]: the trait bound `i32: From<&str>` is not satisfied
             `i32` implements `From<socket2::Type>`
             `i32` implements `From<statement::PageSize>`
             `i32` implements `From<u16>`
-            `i32` implements `From<u8>`
+          and $N others
   = note: this error originates in the macro `query` (in Nightly builds, run with -Z macro-backtrace for more info)

@@ -12,6 +12,6 @@ error[E0277]: the trait bound `Vec<i32>: From<{integer}>` is not satisfied
             `Vec<T>` implements `From<&[T]>`
             `Vec<T>` implements `From<&mut [T; N]>`
             `Vec<T>` implements `From<&mut [T]>`
-            `Vec<T>` implements `From<Cow<'_, [T]>>`
+            `Vec<T>` implements `From<Cow<'a, [T]>>`
           and $N others
   = note: this error originates in the macro `query` (in Nightly builds, run with -Z macro-backtrace for more info)

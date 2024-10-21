@@ -9,8 +9,8 @@ license.workspace = true
 proc-macro = true
 
 [dependencies]
-catalytic_query_parser = { version = "0.1", path = "../catalytic_query_parser" }
-catalytic = { version = "0.1", path = "../catalytic" }
+catalytic_query_parser = { version = "0.2", path = "../catalytic_query_parser" }
+catalytic = { version = "0.2", path = "../catalytic" }
 dotenvy = { workspace = true }
 syn = { workspace = true }
 quote = { workspace = true }
