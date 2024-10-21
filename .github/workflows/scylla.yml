@@ -24,10 +24,10 @@ jobs:
           - ${{ github.workspace }}:/workspace
     steps:
       - uses: actions/checkout@v2
-      - name: Install stable 1.75
+      - name: Install stable 1.81
         uses: actions-rs/toolchain@v1
         with:
-          toolchain: 1.75.0
+          toolchain: 1.81.0
           default: true
           components: rustfmt, clippy
       - name: Load .env file
