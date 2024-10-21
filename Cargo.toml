@@ -10,7 +10,7 @@ resolver = "2"
 
 [workspace.package]
 edition = "2021"
-version = "0.1.24" # When bumping this version, cargo publish in this order: table_to_struct -> query_parser -> macro -> catalytic
+version = "0.2.0" # When bumping this version, cargo publish in this order: table_to_struct -> query_parser -> macro -> catalytic
 authors = ["Jasper Visser <jasperav@hotmail.com>"]
 repository = "https://github.com/Jasperav/catalytic"
 readme = "./README.md"

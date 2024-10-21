@@ -1,7 +1,6 @@
 /// This mod contains structs which are returned from the generated code
 /// The structs are quite specific in what they can do. This means you don't have generic 'execute'
 /// methods, but specific methods, like 'update', 'delete' etc
-use crate::Cursor;
 use futures_util::{StreamExt, TryStreamExt};
 use scylla::_macro_internal::{LegacySerializedValues, SerializeRow};
 use scylla::cql_to_rust::FromRowError;

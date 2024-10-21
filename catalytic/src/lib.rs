@@ -9,5 +9,3 @@ pub mod table_metadata;
 
 // Re-export the scylla library so clients do not have to depend on that
 pub use scylla;
-
-pub type Cursor = Option<scylla::Bytes>;
