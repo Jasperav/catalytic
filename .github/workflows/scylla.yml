@@ -19,7 +19,7 @@ jobs:
         ports:
           - 9042:9042
           - 19042:19042
-        options: --health-cmd "cqlsh --debug" --health-interval 5s --health-retries 10
+        options: --health-cmd "cqlsh --debug" --health-interval 5s --health-retries 20
         volumes:
           - ${{ github.workspace }}:/workspace
     steps:
