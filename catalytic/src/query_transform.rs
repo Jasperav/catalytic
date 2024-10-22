@@ -1,7 +1,6 @@
 /// This mod contains structs which are returned from the generated code
 /// The structs are quite specific in what they can do. This means you don't have generic 'execute'
 /// methods, but specific methods, like 'update', 'delete' etc
-use crate::Cursor;
 use futures_util::{StreamExt, TryStreamExt};
 use scylla::_macro_internal::{LegacySerializedValues, SerializeRow};
 use scylla::cql_to_rust::FromRowError;
@@ -9,6 +8,7 @@ use scylla::frame::value::SerializeValuesError;
 use scylla::query::Query;
 use scylla::transport::errors::QueryError;
 use scylla::transport::iterator::TypedRowIterator;
+use scylla::transport::{PagingState, PagingStateResponse};
 use scylla::{CachingSession, FromRow, QueryResult};
 use std::fmt::{Debug, Formatter};
 use std::marker::PhantomData;
@@ -57,6 +57,8 @@ pub struct QueryEntityVecResult<T> {
     /// The rows variable will be always empty here
     /// They are moved and transformed into the entities variable
     pub query_result: QueryResult,
+
+    pub paging_result: PagingStateResponse,
 }
 
 /// Wrapper, maybe additional fields are added later
@@ -227,7 +229,7 @@ impl<R: AsRef<str>, V: SerializeRow> Qv<R, V> {
 
         tracing::debug!("Executing: {}", as_ref);
 
-        session.execute(as_ref, &self.values).await
+        session.execute_unpaged(as_ref, &self.values).await
     }
 
     async fn execute_all_in_memory<T: FromRow, N>(
@@ -289,15 +291,15 @@ impl<R: AsRef<str>, V: SerializeRow> Qv<R, V> {
         &self,
         session: &CachingSession,
         page_size: Option<i32>,
-        paging_state: Cursor,
+        paging_state: PagingState,
         transform: impl Fn(T) -> N + Copy,
     ) -> Result<QueryEntityVecResult<N>, MultipleSelectQueryErrorTransform> {
         let as_ref = self.query.as_ref();
 
         tracing::debug!(
-            "Executing with page size: {:#?}, paging state: {}: {}",
+            "Executing with page size: {:#?}, paging state: {:?}: {}",
             page_size,
-            paging_state.is_some(),
+            paging_state,
             as_ref,
         );
 
@@ -308,13 +310,14 @@ impl<R: AsRef<str>, V: SerializeRow> Qv<R, V> {
         }
 
         let mut result = session
-            .execute_paged(query, &self.values, paging_state)
+            .execute_single_page(query, &self.values, paging_state)
             .await?;
-        let rows = self.transform(&mut result, transform)?;
+        let rows = self.transform(&mut result.0, transform)?;
 
         Ok(QueryEntityVecResult {
             entities: rows,
-            query_result: result,
+            query_result: result.0,
+            paging_result: result.1,
         })
     }
 
@@ -464,7 +467,7 @@ impl<T: FromRow, R: AsRef<str>, V: SerializeRow> SelectMultiple<T, R, V> {
         &self,
         session: &CachingSession,
         page_size: Option<i32>,
-        paging_state: Cursor,
+        paging_state: PagingState,
     ) -> Result<QueryEntityVecResult<T>, MultipleSelectQueryErrorTransform> {
         self.select_paged_transform(session, page_size, paging_state, |v| v)
             .await
@@ -474,7 +477,7 @@ impl<T: FromRow, R: AsRef<str>, V: SerializeRow> SelectMultiple<T, R, V> {
         &self,
         session: &CachingSession,
         page_size: Option<i32>,
-        paging_state: Cursor,
+        paging_state: PagingState,
         transform: impl Fn(T) -> N + Copy,
     ) -> Result<QueryEntityVecResult<N>, MultipleSelectQueryErrorTransform> {
         self.qv

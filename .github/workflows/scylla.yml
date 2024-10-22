@@ -24,17 +24,16 @@ jobs:
           - ${{ github.workspace }}:/workspace
     steps:
       - uses: actions/checkout@v2
-      - name: Install stable 1.75
+      - name: Install stable 1.81
         uses: actions-rs/toolchain@v1
         with:
-          toolchain: 1.75.0
+          toolchain: 1.81.0
           default: true
           components: rustfmt, clippy
       - name: Load .env file
         uses: xom9ikk/dotenv@v1.0.2
       - name: Run tests
-        # test threads must be one because else database tests will run in parallel and will result in flaky tests
-        run: cargo test --all -- --test-threads=1
+        run: cargo test --all
       - name: Format check
         run: cargo fmt --all -- --check
       - name: Clippy check

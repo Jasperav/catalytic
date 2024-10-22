@@ -24,12 +24,14 @@ mod test {
     use crate::{MyJsonEnum, MyJsonType};
     use catalytic::runtime::create_connection;
     use catalytic::scylla;
+    use catalytic::scylla::transport::{PagingState, PagingStateResponse};
     use catalytic_macro::{query, query_base_table};
     use futures_util::StreamExt;
     use scylla::frame::value::{LegacySerializedValues, SerializeValuesError};
     use scylla::CachingSession;
 
     #[tokio::test]
+    #[serial_test::serial]
     async fn crud() {
         let session = CachingSession::from(create_connection().await, 1);
 
@@ -244,6 +246,7 @@ mod test {
     }
 
     #[tokio::test]
+    #[serial_test::serial]
     async fn paging() -> Result<(), SerializeValuesError> {
         let session = CachingSession::from(create_connection().await, 1);
         let rows_to_generate = 100;
@@ -267,7 +270,7 @@ mod test {
 
         // Let's page
         let select_multiple = query!("select * from person where name = ? order by age", name);
-        let mut paging_state = None;
+        let mut paging_state = PagingState::start();
         let mut counter_rows = 0;
         let mut counter_loop = 0;
 
@@ -279,15 +282,15 @@ mod test {
                 .await
                 .unwrap();
 
-            paging_state = result.query_result.paging_state;
-
             for row in result.entities {
                 assert_eq!(row.age, counter_rows);
 
                 counter_rows += 1;
             }
 
-            if paging_state.is_none() {
+            if let PagingStateResponse::HasMorePages { state: next_state } = result.paging_result {
+                paging_state = next_state;
+            } else {
                 break;
             }
         }
@@ -300,6 +303,7 @@ mod test {
 
     /// Tests that when a custom field_name is provided, everything keeps working
     #[tokio::test]
+    #[serial_test::serial]
     async fn custom_field_name() {
         let connection = CachingSession::from(create_connection().await, 1);
 
@@ -406,6 +410,7 @@ mod test {
     }
 
     #[tokio::test]
+    #[serial_test::serial]
     async fn qmd() -> Result<(), SerializeValuesError> {
         let session = CachingSession::from(create_connection().await, 1);
 

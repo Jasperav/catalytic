@@ -10,7 +10,7 @@ resolver = "2"
 
 [workspace.package]
 edition = "2021"
-version = "0.1.24" # When bumping this version, cargo publish in this order: table_to_struct -> query_parser -> macro -> catalytic
+version = "0.2.0" # When bumping this version, cargo publish in this order: table_to_struct -> query_parser -> macro -> catalytic
 authors = ["Jasper Visser <jasperav@hotmail.com>"]
 repository = "https://github.com/Jasperav/catalytic"
 readme = "./README.md"
@@ -19,21 +19,22 @@ categories = ["database"]
 license = "MIT"
 
 [workspace.dependencies]
-scylla = "0.11.1" # This crate is specifically build for this version
-once_cell = "1"
-heck = "0.4"
-tokio = { version = "1", features = ["time", "rt-multi-thread", "io-util"] }
-thiserror = "1"
+scylla = "0.14.0" # This crate is specifically build for this version
+once_cell = "1.20"
+heck = "0.5"
+tokio = { version = "1.40", features = ["time", "rt-multi-thread", "io-util"] }
+thiserror = "1.0"
 futures-util = "0.3"
-syn = { version = "2", features = ["full", "extra-traits"] }
-quote = "1"
-proc-macro2 = "1"
-serde = { version = "1", features = ["derive"] }
-serde_json = "1"
+syn = { version = "2.0", features = ["full", "extra-traits"] }
+quote = "1.0"
+proc-macro2 = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
 proc_macro2_helper = "0.2"
-uuid = "1"
-regex = "1"
+uuid = "1.11"
+regex = "1.11"
 tracing = "0.1"
 tracing-subscriber = "0.3"
-trybuild = "1"
+trybuild = "1.0"
 dotenvy = "0.15"
+serial_test = "3.1"

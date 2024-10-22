@@ -27,7 +27,7 @@ pub fn query_collect_to_vec<Entity: FromRow>(
 
     block_on(async move {
         GLOBAL_CONNECTION
-            .query(query, values)
+            .query_unpaged(query, values)
             .await
             .unwrap()
             .rows
@@ -41,7 +41,12 @@ pub fn query_collect_to_vec<Entity: FromRow>(
 pub fn query(query: impl Into<Query>, values: impl SerializeRow) {
     touch_global_connection();
 
-    block_on(async move { GLOBAL_CONNECTION.query(query, values).await.unwrap() });
+    block_on(async move {
+        GLOBAL_CONNECTION
+            .query_unpaged(query, values)
+            .await
+            .unwrap()
+    });
 }
 
 pub fn use_keyspace(keyspace: &str) {
@@ -68,8 +73,8 @@ pub fn create_test_tables() {
     touch_global_connection();
 
     block_on(async {
-        GLOBAL_CONNECTION.query(format!("create table if not exists {} (a int, b int, c int, d int, e int, primary key((b, c), d, a))", TEST_TABLE), []).await.unwrap();
-        GLOBAL_CONNECTION.query(format!("create table if not exists {}  (a int, b text, c text, d int, primary key((a), b, c))", ANOTHER_TEST_TABLE), []).await.unwrap();
+        GLOBAL_CONNECTION.query_unpaged(format!("create table if not exists {} (a int, b int, c int, d int, e int, primary key((b, c), d, a))", TEST_TABLE), []).await.unwrap();
+        GLOBAL_CONNECTION.query_unpaged(format!("create table if not exists {}  (a int, b text, c text, d int, primary key((a), b, c))", ANOTHER_TEST_TABLE), []).await.unwrap();
     })
 }
 
@@ -94,7 +99,7 @@ pub async fn create_connection() -> Session {
         .unwrap();
 
     session
-        .query(format!(
+        .query_unpaged(format!(
             "create keyspace if not exists {} with replication = {{ 'class': 'SimpleStrategy', 'replication_factor': 1 }} and durable_writes = false",
             keyspace()
         ), [])

@@ -18,6 +18,7 @@ impl ColumnKind {
     }
 }
 
+#[allow(clippy::to_string_trait_impl)]
 impl ToString for ColumnKind {
     fn to_string(&self) -> String {
         let column_kind_to_string = match self {

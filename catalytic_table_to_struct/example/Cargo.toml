@@ -7,13 +7,13 @@ version.workspace = true
 license.workspace = true
 
 [build-dependencies]
-catalytic_table_to_struct = { version = "0.1", path = "../../catalytic_table_to_struct" }
-catalytic = { version = "0.1", path = "../../catalytic" }
+catalytic_table_to_struct = { version = "0.2", path = "../../catalytic_table_to_struct" }
+catalytic = { version = "0.2", path = "../../catalytic" }
 dotenvy = { workspace = true }
 
 [dependencies]
-catalytic_macro = { version = "0.1", path = "../../catalytic_macro" }
-catalytic = { version = "0.1", path = "../../catalytic" }
+catalytic_macro = { version = "0.2", path = "../../catalytic_macro" }
+catalytic = { version = "0.2", path = "../../catalytic" }
 tracing = { workspace = true }
 tokio = { workspace = true }
 serde_json = { workspace = true }
@@ -22,3 +22,6 @@ uuid = { workspace = true }
 trybuild = { workspace = true }
 futures-util = { workspace = true }
 tracing-subscriber = { workspace = true }
+
+[dev-dependencies]
+serial_test = { workspace = true }

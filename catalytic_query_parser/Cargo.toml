@@ -10,8 +10,8 @@ catalytic_macro = { path = "../catalytic_macro" }
 trybuild = { workspace = true }
 
 [dependencies]
-catalytic = { version = "0.1", path = "../catalytic" }
-catalytic_table_to_struct = { version = "0.1", path = "../catalytic_table_to_struct" }
+catalytic = { version = "0.2", path = "../catalytic" }
+catalytic_table_to_struct = { version = "0.2", path = "../catalytic_table_to_struct" }
 dotenvy = { workspace = true }
 quote = { workspace = true }
 syn = { workspace = true }

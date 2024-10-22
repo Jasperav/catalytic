@@ -6,7 +6,7 @@ pub(crate) fn json(derive_input: DeriveInput) -> TokenStream {
     let name = derive_input.ident;
 
     quote! {
-        impl catalytic::scylla::_macro_internal::SerializeCql for #name {
+        impl catalytic::scylla::_macro_internal::SerializeValue for #name {
             fn serialize<'b>(
                 &self,
                 typ: &catalytic::scylla::_macro_internal::ColumnType,
